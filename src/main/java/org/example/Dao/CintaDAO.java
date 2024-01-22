@@ -5,6 +5,8 @@ import org.example.model.Cinta;
 import org.example.Controller.ProgramController;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class CintaDAO {
     private Connection conn;
@@ -13,10 +15,6 @@ public class CintaDAO {
     }
     public CintaDAO() {
         this.conn= Connect.getConnect();
-    }
-    public int GetLastIdCinta(){
-        int a = (int)Math.random() * 1000;
-        return a;
     }
     public void CreateCinta(Cinta cinta){
         try {
@@ -38,5 +36,15 @@ public class CintaDAO {
             pst.execute();
         } catch (Exception e) {
         }
+    }
+    public boolean ExisteCinta(String cintaName) throws SQLException {
+        String sql = "SELECT * FROM cinta WHERE name = ?";
+        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setString(1, cintaName);
+        ResultSet rs = pst.executeQuery();
+
+        boolean existe = rs.next();
+
+        return existe;
     }
 }
